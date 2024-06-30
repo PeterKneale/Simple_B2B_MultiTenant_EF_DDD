@@ -1,9 +1,9 @@
 ﻿namespace Simple.IntegrationTests.Tenants.Queries;
 
-public class BaseListTenantsTest(ServiceFixture service, ITestOutputHelper output) : BaseTest(service, output)
+public class ListTenantsTests(ServiceFixture service, ITestOutputHelper output) : BaseTest(service, output)
 {
     [Fact]
-    public async Task List_contains_correct_number_of_tenants()
+    public async Task Paging_returns_correct_item_count_and_total()
     {
         // Create 1 tenant (1 in total)
         await CreateTenants(1);
@@ -97,10 +97,10 @@ public class BaseListTenantsTest(ServiceFixture service, ITestOutputHelper outpu
         results.Total.Should().Be(expectedTotal);
     }
 
-    private async Task<PaginatedResult<SingleTenant.Result>> List(int pageNumber, int pageSize)
+    private async Task<PaginatedResult<ListTenants.Result>> List(int pageNumber, int pageSize)
     {
         Log($"Listing page {pageNumber}/{pageSize}");
-        return await Query(new SingleTenant.Query(pageNumber, pageSize));
+        return await Query(new ListTenants.Query(pageNumber, pageSize));
     }
 
     private async Task CreateTenants(int count)

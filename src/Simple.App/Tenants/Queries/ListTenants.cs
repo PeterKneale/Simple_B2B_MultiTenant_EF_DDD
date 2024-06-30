@@ -4,7 +4,7 @@ using Simple.Domain.Tenants.Specifications;
 
 namespace Simple.App.Tenants.Queries;
 
-public static class SingleTenant
+public static class ListTenants
 {
     public record Query(int PageNumber, int PageSize) : IRequest<PaginatedResult<Result>>;
 

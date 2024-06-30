@@ -30,7 +30,7 @@ public class TenantWorkflowTests(ServiceFixture service, ITestOutputHelper outpu
         authResult.Success.Should().BeTrue();
         authResult.UserId.Should().Be(user.UserId);
 
-        var listResult = await Query(new SingleTenant.Query(1, 10));
+        var listResult = await Query(new ListTenants.Query(1, 10));
         Log(listResult);
         listResult.Items.Should().ContainSingle(t => t.TenantId == tenant.TenantId && t.TenantName == tenant.TenantName);
         
