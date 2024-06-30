@@ -1,0 +1,21 @@
+﻿<#@ template language="C#" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+<# var words = new List<string> { "Tenant", "User", "Survey","Question" }; #>
+
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+<# foreach (var word in words) { #>
+using Simple.Domain.<#= word #>s;
+<# } #>
+
+namespace Simple.Infra.Database.Converters;
+
+<# foreach (var word in words) {
+    var className = word + "IdConverter";
+    var typeName = word + "Id";
+#>
+
+public class <#= className #>() : ValueConverter<<#= typeName #>, Guid>(id => id.Value, guid => new <#= typeName #>(guid));
+
+<# } #>

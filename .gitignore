@@ -1,0 +1,16 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+/.idea/*
+/Solution.sln.DotSettings.user
+/*.user
+*.pdf
+*.env
+aws-logger-errors.txt
+**/coverage/
+/.sonarqube
+/dotCover.Output/
+/dotCover.Output.html
+*.feature.cs
