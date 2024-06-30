@@ -1,6 +1,8 @@
 ﻿namespace Simple.IntegrationTests.Tenants.Queries;
 
-public class ListTenantsTests(ServiceFixture service, ITestOutputHelper output) : BaseTest(service, output)
+// We need to remove all tenants so that those created in other tests
+// don't affect the pagination results.
+public class ListTenantsTests(ServiceFixture service, ITestOutputHelper output) : BaseTest(service, output, resetDatabase:true)
 {
     [Fact]
     public async Task Paging_returns_correct_item_count_and_total()
@@ -75,7 +77,7 @@ public class ListTenantsTests(ServiceFixture service, ITestOutputHelper output) 
         await Assert(1, 10, 10, 11);
         await Assert(2, 10, 1, 11);
         await Assert(3, 10, 0, 11);
-        
+
         // Create more tenants (21 in total)
         await CreateTenants(10);
         // page size is 5.

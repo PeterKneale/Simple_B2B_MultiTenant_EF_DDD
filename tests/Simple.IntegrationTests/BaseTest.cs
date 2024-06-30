@@ -12,18 +12,22 @@ public abstract class BaseTest
     private readonly ServiceFixture _service;
     private readonly ITestOutputHelper _output;
 
-    protected BaseTest(ServiceFixture service, ITestOutputHelper output)
+    protected BaseTest(ServiceFixture service, ITestOutputHelper output, bool resetDatabase = false)
     {
         _service = service;
         _output = output;
         _service.OutputHelper = _output;
+        if (resetDatabase)
+        {
+            _service.ResetDatabase();
+        }
     }
 
     protected void Log(object o)
     {
         _output.WriteLine(JsonConvert.SerializeObject(o, Formatting.Indented));
     }
-    
+
     protected void Log(string message)
     {
         _output.WriteLine(message);
@@ -42,7 +46,7 @@ public abstract class BaseTest
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         return await mediator.Send(query);
     }
-    
+
     protected async Task Command(IRequest command, FakeTenant tenant, FakeUser user)
     {
         await using var scope = GetContextualScope(tenant.TenantId, user.UserId);

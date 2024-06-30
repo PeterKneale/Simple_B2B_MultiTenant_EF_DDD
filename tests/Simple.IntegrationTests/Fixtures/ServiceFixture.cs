@@ -26,6 +26,11 @@ public class ServiceFixture : IDisposable, ITestOutputHelperAccessor
                 c.Filter = (category, level) => true;
             }))
             .BuildServiceProvider();
+        ResetDatabase();
+    }
+
+    public void ResetDatabase()
+    {
         _provider.ApplyDatabaseMigrations(true);
     }
 
