@@ -15,6 +15,8 @@ public static class DbConstants
     public const string FirstNameColumn = "first_name";
     public const string TitleColumn = "title";
     public const string MandatoryColumn = "mandatory";
+    public const string InfoColumn = "info";
+    public const string TypeColumn = "type";
     public const string IdColumn = "id";
     public const string IsVerified = "is_verified";
     public const string KeyColumn = "key";

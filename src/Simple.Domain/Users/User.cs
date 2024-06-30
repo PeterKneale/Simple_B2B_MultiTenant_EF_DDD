@@ -24,9 +24,9 @@ public class User : IAggregateRoot
         Name = name;
     }
     
-    public UserId UserId { get; init; }
+    public UserId UserId { get; init; } = null!;
 
-    public TenantId TenantId { get; init; }
+    public TenantId TenantId { get; init; } = null!;
 
     public Name Name { get; private set; } = null!;
 

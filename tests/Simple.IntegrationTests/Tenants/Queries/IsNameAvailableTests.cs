@@ -9,7 +9,7 @@ public class IsNameAvailableTests(ServiceFixture service, ITestOutputHelper outp
         var name = "abc" + Guid.NewGuid();
         
         // Act
-        var result = await Execute(new IsNameAvailable.Query(name));
+        var result = await Query(new IsNameAvailable.Query(name));
 
         // Assert
         result.IsNameValid.Should().BeTrue();
@@ -26,8 +26,8 @@ public class IsNameAvailableTests(ServiceFixture service, ITestOutputHelper outp
         var user = Fake.User();
         
         // Act
-        await Execute(new Register.Command(tenant.TenantId, tenant.TenantName, user.UserId, user.FirstName, user.LastName, user.Email, user.Password));   
-        var result = await Execute(new IsNameAvailable.Query(value));
+        await Command(new Register.Command(tenant.TenantId, tenant.TenantName, user.UserId, user.FirstName, user.LastName, user.Email, user.Password));   
+        var result = await Query(new IsNameAvailable.Query(value));
 
         // Assert
         result.IsNameValid.Should().BeTrue();
@@ -43,7 +43,7 @@ public class IsNameAvailableTests(ServiceFixture service, ITestOutputHelper outp
         var expected = "abc-def" + unique;
     
         // Act
-        var result = await Execute(new IsNameAvailable.Query(name));
+        var result = await Query(new IsNameAvailable.Query(name));
     
         // Assert
         result.IsNameValid.Should().BeFalse();
@@ -65,8 +65,8 @@ public class IsNameAvailableTests(ServiceFixture service, ITestOutputHelper outp
         var user = Fake.User();
     
         // Act
-        await Execute(new Register.Command(tenant.TenantId, tenant.TenantName, user.UserId, user.FirstName, user.LastName, user.Email, user.Password)); 
-        var result = await Execute(new IsNameAvailable.Query(name));
+        await Command(new Register.Command(tenant.TenantId, tenant.TenantName, user.UserId, user.FirstName, user.LastName, user.Email, user.Password)); 
+        var result = await Query(new IsNameAvailable.Query(name));
     
         // Assert
         result.IsNameValid.Should().BeFalse();

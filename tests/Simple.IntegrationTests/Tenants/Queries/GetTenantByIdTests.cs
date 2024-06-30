@@ -7,7 +7,7 @@ public class GetTenantByIdTests(ServiceFixture service, ITestOutputHelper output
     {
         var id = Guid.NewGuid();
 
-        Func<Task> act = async () => await Execute(new GetTenantById.Query(id));
+        Func<Task> act = async () => await Query(new GetTenantById.Query(id));
 
         await act.Should()
             .ThrowAsync<PlatformException>()

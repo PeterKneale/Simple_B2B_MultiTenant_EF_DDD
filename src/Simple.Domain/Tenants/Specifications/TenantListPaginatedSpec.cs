@@ -1,16 +1,13 @@
-﻿using Ardalis.Specification;
-using Simple.Domain.Users.Specifications;
+﻿namespace Simple.Domain.Tenants.Specifications;
 
-namespace Simple.Domain.Tenants.Specifications;
-
-public class TenantListPaginatedSpec : PaginatedSpec<Tenant>
+public class TenantListPaginatedSpec : Specification<Tenant>
 {
-    public TenantListPaginatedSpec(int page, int pageSize) : base(page, pageSize)
+    public TenantListPaginatedSpec(Page page) 
     {
         Query
             .OrderBy(x => x.TenantName)
-            .Skip(Skip)
-            .Take(Take)
+            .Skip(page.Skip)
+            .Take(page.Take)
             .AsNoTracking();
     }
 }

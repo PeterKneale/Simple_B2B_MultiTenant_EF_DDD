@@ -1,6 +1,6 @@
 ﻿using Simple.App.Users.Queries;
 
-namespace Simple.Web.Pages.Profile;
+namespace Simple.Web.Pages.Tenant.Profile;
 
 public class IndexPage(IMediator mediator) : BasePageModel
 {

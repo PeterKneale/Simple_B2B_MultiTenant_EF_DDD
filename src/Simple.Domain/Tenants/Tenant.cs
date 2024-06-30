@@ -1,9 +1,6 @@
-﻿using Simple.Domain.Surveys;
-using Simple.Domain.Users;
+﻿namespace Simple.Domain.Tenants;
 
-namespace Simple.Domain.Tenants;
-
-public partial class Tenant : IAggregateRoot
+public class Tenant : IAggregateRoot
 {
     private Tenant()
     {
@@ -17,13 +14,9 @@ public partial class Tenant : IAggregateRoot
         CreatedAt = SystemTime.UtcNow();
     }
     
-    public TenantId TenantId { get; private init; }
+    public TenantId TenantId { get; private init; } = null!;
 
     public TenantName TenantName { get; private init; } = null!;
 
     public DateTimeOffset CreatedAt { get; private init; }
-
-    public virtual ICollection<Survey> Surveys { get; set; } = new List<Survey>();
-
-    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

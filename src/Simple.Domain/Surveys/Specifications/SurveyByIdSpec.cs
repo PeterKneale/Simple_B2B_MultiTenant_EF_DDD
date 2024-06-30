@@ -1,6 +1,4 @@
-﻿using Ardalis.Specification;
-
-namespace Simple.Domain.Surveys.Specifications;
+﻿namespace Simple.Domain.Surveys.Specifications;
 
 public class SurveyByIdSpec : SingleResultSpecification<Survey>
 {

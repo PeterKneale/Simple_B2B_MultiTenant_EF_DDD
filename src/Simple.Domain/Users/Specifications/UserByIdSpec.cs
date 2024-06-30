@@ -1,6 +1,4 @@
-﻿using Ardalis.Specification;
-
-namespace Simple.Domain.Users.Specifications;
+﻿namespace Simple.Domain.Users.Specifications;
 
 public class UserByIdSpec : SingleResultSpecification<User>
 {

@@ -7,7 +7,7 @@ public class GetTenantByNameTests(ServiceFixture service, ITestOutputHelper outp
     {
         var name = "x";
 
-        Func<Task> act = async () => await Execute(new GetTenantByName.Query(name));
+        Func<Task> act = async () => await Query(new GetTenantByName.Query(name));
 
         await act.Should()
             .ThrowAsync<PlatformException>()

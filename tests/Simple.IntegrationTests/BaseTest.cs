@@ -9,57 +9,59 @@ namespace Simple.IntegrationTests;
 [Collection(nameof(ServiceFixtureCollection))]
 public abstract class BaseTest
 {
+    private readonly ServiceFixture _service;
+    private readonly ITestOutputHelper _output;
+
     protected BaseTest(ServiceFixture service, ITestOutputHelper output)
     {
-        Service = service;
-        Output = output;
-        Service.OutputHelper = Output;
-    }
-
-    protected ServiceFixture Service { get; }
-
-    protected ITestOutputHelper Output { get; }
-
-    protected async Task Execute(IRequest command)
-    {
-        await using var scope = Service.ServiceProvider.CreateAsyncScope();
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-        await mediator.Send(command);
-    }
-    
-    protected async Task Execute(IRequest command, FakeTenant tenant, FakeUser user) => 
-        await Execute(command, tenant.TenantId, user.UserId);
-    
-    protected async Task<TResponse> Execute<TResponse>(IRequest<TResponse> query, FakeTenant tenant, FakeUser user) => 
-        await Execute(query, tenant.TenantId, user.UserId);
-
-    private async Task Execute(IRequest command, Guid tenantId, Guid userId)
-    {
-        await using var scope = Service.ServiceProvider.CreateAsyncScope();
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-        var context = scope.ServiceProvider.GetRequiredService<IExecutionContext>();
-        context.Set(tenantId, userId);
-        await mediator.Send(command);
-    }
-
-    protected async Task<TResponse> Execute<TResponse>(IRequest<TResponse> query)
-    {
-        await using var scope = Service.ServiceProvider.CreateAsyncScope();
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-        return await mediator.Send(query);
-    }
-
-    private async Task<TResponse> Execute<TResponse>(IRequest<TResponse> query, Guid tenantId, Guid userId)
-    {
-        await using var scope = Service.ServiceProvider.CreateAsyncScope();
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-        var context = scope.ServiceProvider.GetRequiredService<IExecutionContext>();
-        context.Set(tenantId, userId);
-        return await mediator.Send(query);
+        _service = service;
+        _output = output;
+        _service.OutputHelper = _output;
     }
 
     protected void Log(object o)
     {
-        Output.WriteLine(JsonConvert.SerializeObject(o, Formatting.Indented));
+        _output.WriteLine(JsonConvert.SerializeObject(o, Formatting.Indented));
+    }
+    
+    protected void Log(string message)
+    {
+        _output.WriteLine(message);
+    }
+
+    protected async Task Command(IRequest command)
+    {
+        await using var scope = _service.ServiceProvider.CreateAsyncScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        await mediator.Send(command);
+    }
+
+    protected async Task<TResponse> Query<TResponse>(IRequest<TResponse> query)
+    {
+        await using var scope = _service.ServiceProvider.CreateAsyncScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        return await mediator.Send(query);
+    }
+    
+    protected async Task Command(IRequest command, FakeTenant tenant, FakeUser user)
+    {
+        await using var scope = GetContextualScope(tenant.TenantId, user.UserId);
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        await mediator.Send(command);
+    }
+
+    protected async Task<TResponse> Query<TResponse>(IRequest<TResponse> query, FakeTenant tenant, FakeUser user)
+    {
+        await using var scope = GetContextualScope(tenant.TenantId, user.UserId);
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        return await mediator.Send(query);
+    }
+
+    private AsyncServiceScope GetContextualScope(Guid tenantId, Guid userId)
+    {
+        var scope = _service.ServiceProvider.CreateAsyncScope();
+        var context = scope.ServiceProvider.GetRequiredService<IExecutionContext>();
+        context.Set(tenantId, userId);
+        return scope;
     }
 }

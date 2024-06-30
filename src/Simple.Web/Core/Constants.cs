@@ -11,4 +11,8 @@ public static class Constants
     
     public const string UserIdClaim = nameof(UserIdClaim);
     public const string TenantIdClaim = nameof(TenantIdClaim);
+    public const string AdminRoleName = "admin";
+    public const string TenantRoleName = "tenant";
+    public const string IsAdminRole = "is_admin";
+    public const string IsTenantRole = "is_tenant";
 }

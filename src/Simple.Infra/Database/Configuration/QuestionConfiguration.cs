@@ -18,11 +18,10 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
             .HasColumnName(SurveyIdColumn)
             .HasConversion<SurveyIdConverter>();
         
-        builder.Property(e => e.Mandatory)
-            .HasColumnName(MandatoryColumn);
-        
-        builder.Property(e => e.Title)
-            .HasColumnName(TitleColumn);
+        builder.Property(e => e.Type)
+            .HasColumnName(InfoColumn)
+            .HasColumnType("jsonb")
+            .HasConversion<QuestionInfoConverter>();
         
         builder.Property(e => e.CreatedAt)
             .HasColumnName(CreatedAtColumn);

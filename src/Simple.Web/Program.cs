@@ -4,20 +4,19 @@ using Simple.Web.Pages.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorPages(options =>
-{
-    options.Conventions.AllowAnonymousToPage("/Auth/Forbidden");
-    options.Conventions.AllowAnonymousToPage("/Auth/ForgotPassword");
-    options.Conventions.AllowAnonymousToPage("/Auth/ResetPassword");
-    options.Conventions.AllowAnonymousToPage("/Auth/Login");
-    options.Conventions.AllowAnonymousToPage("/Auth/Logout");
-    options.Conventions.AllowAnonymousToPage("/Auth/Register");
-});
-builder.Services.AddApplication();
-builder.Services.AddInfra(builder.Configuration);
-builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<SetContextMiddleware>();
+builder.Services
+    .AddRazorPages(options =>
+    {
+        options.Conventions.AllowAnonymousToPage("/Auth/Forbidden");
+        options.Conventions.AllowAnonymousToPage("/Auth/ForgotPassword");
+        options.Conventions.AllowAnonymousToPage("/Auth/ResetPassword");
+        options.Conventions.AllowAnonymousToPage("/Auth/Login");
+        options.Conventions.AllowAnonymousToPage("/Auth/Logout");
+        options.Conventions.AllowAnonymousToPage("/Auth/Register");
+        options.Conventions.AuthorizeFolder("/Tenant", IsTenantRole);
+        options.Conventions.AuthorizeFolder("/Admin", IsAdminRole);
+    })
+    .AddRazorRuntimeCompilation();
 
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -29,6 +28,20 @@ builder.Services
         options.LogoutPath = "/Auth/Logout";
         options.AccessDeniedPath = "/Auth/Forbidden";
     });
+
+builder.Services
+    .AddAuthorization(options =>
+    {
+        options.AddPolicy(IsAdminRole, policy => policy.RequireRole(AdminRoleName));
+        options.AddPolicy(IsTenantRole, policy => policy.RequireRole(TenantRoleName));
+    });
+
+builder.Services.AddApplication();
+builder.Services.AddInfra(builder.Configuration);
+builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<SetTenantContextMiddleware>();
+
 var app = builder.Build();
 
 
@@ -47,7 +60,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<SetContextMiddleware>();
+app.UseMiddleware<SetTenantContextMiddleware>();
 
 app.MapRazorPages();
 

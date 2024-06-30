@@ -1,7 +1,7 @@
 ﻿using Simple.App.Users.Commands;
 using Simple.App.Users.Queries;
 
-namespace Simple.Web.Pages.Profile;
+namespace Simple.Web.Pages.Tenant.Profile;
 
 public class UpdateNamePage(IMediator mediator) : BasePageModel
 {

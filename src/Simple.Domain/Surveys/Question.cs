@@ -1,4 +1,6 @@
-﻿namespace Simple.Domain.Surveys;
+﻿using Simple.Domain.Surveys.Questions;
+
+namespace Simple.Domain.Surveys;
 
 public class Question
 {
@@ -7,18 +9,26 @@ public class Question
         // EF
     }
 
-    public Question(SurveyId surveyId, string title, bool mandatory)
+    private Question(SurveyId surveyId, QuestionType type)
     {
         SurveyId = surveyId;
         QuestionId = new QuestionId(Guid.NewGuid());
-        Title = title;
-        Mandatory = mandatory;
+        Type = type;
         CreatedAt = SystemTime.UtcNow();
     }
 
-    public SurveyId SurveyId { get; init; }
-    public QuestionId QuestionId { get; init; }
-    public string Title { get; init; }
-    public bool Mandatory { get; init; }
+    public static Question CreateTextQuestion(SurveyId surveyId, string title, bool mandatory, int maxLength)
+    {
+        return new Question(surveyId, new TextQuestionType(title, mandatory, maxLength));
+    }
+
+    public static Question CreateListQuestion(SurveyId surveyId, string title, bool mandatory, IEnumerable<string> options, bool single)
+    {
+        return new Question(surveyId, new ListQuestionType(title, mandatory, options, single));
+    }
+
+    public SurveyId SurveyId { get; init; } = null!;
+    public QuestionType Type { get; init; } = null!;
+    public QuestionId QuestionId { get; init; } = null!;
     public DateTimeOffset CreatedAt { get; init; }
 }

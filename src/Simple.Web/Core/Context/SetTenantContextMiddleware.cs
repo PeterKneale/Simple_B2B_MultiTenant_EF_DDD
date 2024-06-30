@@ -7,21 +7,28 @@ using Simple.Domain.Users;
 
 namespace Simple.Web.Core.Context;
 
-public class SetContextMiddleware(ISender sender, ILogger<SetContextMiddleware> log) : IMiddleware
+public class SetTenantContextMiddleware(ISender sender, ILogger<SetTenantContextMiddleware> log) : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var identity = context.User.Identity!;
         if (!identity.IsAuthenticated)
         {
-            log.LogDebug("Not setting context, user is not authenticated");
+            log.LogDebug("Not setting tenant context, user is not authenticated");
             await next(context);
             return;
         }
         
         if (context.Request.Path == "/auth/logout")
         {
-            log.LogDebug("Not setting context, user is logging out");
+            log.LogDebug("Not setting tenant context, user is logging out");
+            await next(context);
+            return;
+        }
+        
+        if(context.User.GetRoleClaim()==AdminRoleName)
+        {
+            log.LogDebug("Not setting tenant context, user is admin");
             await next(context);
             return;
         }

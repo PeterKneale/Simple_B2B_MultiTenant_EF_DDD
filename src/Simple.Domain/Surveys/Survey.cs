@@ -19,9 +19,16 @@ public class Survey : IAggregateRoot
         CreatedAt = SystemTime.UtcNow();
     }
 
-    public Question AddQuestion(string text, bool mandatory)
+    public Question AddTextQuestion(string text, bool mandatory, int maxLength)
     {
-        var question = new Question(SurveyId, text, mandatory);
+        var question = Question.CreateTextQuestion(SurveyId, text, mandatory, maxLength);
+        _questions.Add(question);
+        return question;
+    }
+
+    public Question AddListQuestion(string text, bool mandatory, IEnumerable<string> options, bool single)
+    {
+        var question = Question.CreateListQuestion(SurveyId, text, mandatory, options, single);
         _questions.Add(question);
         return question;
     }
@@ -31,11 +38,11 @@ public class Survey : IAggregateRoot
         _questions.Remove(_questions.Single(q => q.QuestionId == questionId));
     }
 
-    public SurveyId SurveyId { get; init; }
+    public SurveyId SurveyId { get; init; } = null!;
 
-    public SurveyName Name { get; init; }
+    public SurveyName Name { get; init; } = null!;
 
-    public TenantId TenantId { get; init; }
+    public TenantId TenantId { get; init; } = null!;
 
     public DateTimeOffset CreatedAt { get; init; }
 

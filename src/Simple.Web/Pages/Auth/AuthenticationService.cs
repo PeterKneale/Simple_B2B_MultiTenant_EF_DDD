@@ -7,7 +7,7 @@ namespace Simple.Web.Pages.Auth;
 
 public class AuthenticationService(ISender module, IHttpContextAccessor accessor, ILogger<AuthenticationService> logs)
 {
-    public async Task<bool> AuthenticateWithCredentials(string email, string password)
+    public async Task<bool> AuthenticateAsTenant(string email, string password)
     {
         var result = await module.Send(new CanAuthenticate.Query(email, password));
         if (result.Success == false)
@@ -29,7 +29,8 @@ public class AuthenticationService(ISender module, IHttpContextAccessor accessor
         {
             new(UserIdClaim, userId.ToString()),
             new(TenantIdClaim, tenantId.ToString()),
-            new(ClaimTypes.Name, email)
+            new(ClaimTypes.Name, email),
+            new(ClaimTypes.Role, TenantRoleName)
         };
 
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -39,6 +40,29 @@ public class AuthenticationService(ISender module, IHttpContextAccessor accessor
 
         logs.LogInformation("Authentication was successful: {Email}", email);
 
+        return true;
+    }
+
+    public async Task<bool> AuthenticateAsAdmin(string email, string password)
+    {
+        var admin_email = "admin@example.org";
+        var admin_password = "admin@example.org";
+        var correctEmail = email.Equals(admin_email, StringComparison.InvariantCultureIgnoreCase);
+        var correctPassword = password.Equals(admin_password, StringComparison.InvariantCulture);
+        if (!correctEmail || !correctPassword)
+        {
+            return false;
+        }
+        
+        var principal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
+        {
+            new(ClaimTypes.Name, "Admin"),
+            new(ClaimTypes.Role, AdminRoleName)
+        }, CookieAuthenticationDefaults.AuthenticationScheme));
+
+        await accessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+        logs.LogInformation("Site Admin Authentication was successful: {Email}", email);
         return true;
     }
 }

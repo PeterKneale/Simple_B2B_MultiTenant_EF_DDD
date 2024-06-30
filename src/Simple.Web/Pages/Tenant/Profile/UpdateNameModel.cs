@@ -1,4 +1,4 @@
-﻿namespace Simple.Web.Pages.Profile;
+﻿namespace Simple.Web.Pages.Tenant.Profile;
 
 public class UpdateNameModel
 {

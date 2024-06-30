@@ -1,6 +1,4 @@
-﻿using Ardalis.Specification;
-
-namespace Simple.Domain.Tenants.Specifications;
+﻿namespace Simple.Domain.Tenants.Specifications;
 
 public class TenantByNameSpec : SingleResultSpecification<Tenant>
 {

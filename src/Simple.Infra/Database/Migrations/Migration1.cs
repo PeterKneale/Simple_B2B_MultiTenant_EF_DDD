@@ -31,8 +31,7 @@ public class Migration1 : Migration
         Create.Table(QuestionsTable)
             .WithColumn(QuestionIdColumn).AsGuid().PrimaryKey()
             .WithColumn(SurveyIdColumn).AsGuid().ForeignKey(SurveysTable, SurveyIdColumn)
-            .WithColumn(TitleColumn).AsString()
-            .WithColumn(MandatoryColumn).AsBoolean()
+            .WithColumn(InfoColumn).AsCustom("jsonb")
             .WithColumn(CreatedAtColumn).AsDateTimeOffset();
     }
 

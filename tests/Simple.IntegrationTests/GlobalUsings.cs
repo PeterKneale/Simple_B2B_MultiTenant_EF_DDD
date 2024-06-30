@@ -1,4 +1,5 @@
 global using FluentAssertions;
+global using JetBrains.Annotations;
 global using Simple.App;
 global using Simple.App.Surveys.Commands;
 global using Simple.App.Surveys.Queries;

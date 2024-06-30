@@ -7,7 +7,7 @@ public static class ListQuestions
 {
     public record Query(Guid SurveyId) : IRequest<IEnumerable<Result>>;
 
-    public record Result(Guid QuestionId, string Title, bool Mandatory);
+    public record Result(Guid QuestionId, string Title, bool Mandatory, string Type);
 
     public class Validator : AbstractValidator<Query>
     {
@@ -28,7 +28,12 @@ public static class ListQuestions
                 PlatformException.ThrowNotFound(surveyId);
             }
 
-            return survey.Questions.Select(q => new Result(q.QuestionId, q.Title, q.Mandatory));
+            return survey.Questions.Select(q =>
+            {
+                var type = q.Type.Type;
+                var result = new Result(q.QuestionId, q.Type.Title, q.Type.Mandatory, type);
+                return result;
+            });
         }
     }
 }
