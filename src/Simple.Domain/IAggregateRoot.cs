@@ -1,5 +1,3 @@
 ﻿namespace Simple.Domain;
 
-public interface IAggregateRoot
-{
-}
+public interface IAggregateRoot;

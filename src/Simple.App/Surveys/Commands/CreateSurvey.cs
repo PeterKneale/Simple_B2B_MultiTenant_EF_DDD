@@ -1,4 +1,5 @@
-﻿using Simple.Domain.Surveys;
+﻿using Simple.App.Contracts;
+using Simple.Domain.Surveys;
 using Simple.Domain.Surveys.Specifications;
 
 namespace Simple.App.Surveys.Commands;

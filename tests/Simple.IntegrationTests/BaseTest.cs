@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Simple.App.Contracts;
 using Simple.Domain.Tenants;
 using Simple.Domain.Users;
 

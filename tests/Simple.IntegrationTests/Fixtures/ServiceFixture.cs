@@ -23,7 +23,15 @@ public class ServiceFixture : IDisposable, ITestOutputHelperAccessor
             .AddInfra(_config)
             .AddLogging(builder => builder.AddXUnit(this, c =>
             {
-                c.Filter = (category, level) => true;
+                builder.SetMinimumLevel(LogLevel.Debug);
+                c.Filter = (category, level) =>
+                {
+                    if (category.StartsWith("Simple"))
+                        return level >= LogLevel.Information;
+                    if (category.StartsWith("Microsoft.EntityFrameworkCore"))
+                        return level >= LogLevel.Warning;
+                    return level >= LogLevel.Warning;
+                };
             }))
             .BuildServiceProvider();
         ResetDatabase();
@@ -35,7 +43,7 @@ public class ServiceFixture : IDisposable, ITestOutputHelperAccessor
     }
 
     public IServiceProvider ServiceProvider => _provider;
-    
+
     public IConfiguration Configuration => _config;
 
     public void Dispose()
@@ -44,5 +52,4 @@ public class ServiceFixture : IDisposable, ITestOutputHelperAccessor
     }
 
     public ITestOutputHelper? OutputHelper { get; set; }
-    
 }

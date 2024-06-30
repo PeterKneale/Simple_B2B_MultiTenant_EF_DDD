@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Simple.Infra.Behaviours;
 using Simple.Infra.Database;
 using Simple.Infra.Database.Repositories;
+using Simple.Infra.DomainEvents;
 using MigrationRunner = Simple.Infra.Database.Migrations.MigrationRunner;
 
 namespace Simple.Infra;
@@ -45,6 +46,9 @@ public static class ServiceCollectionExtensions
         // repositories
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
+        
+        // ddd
+        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
         return services;
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Simple.Domain.Tenants;
 using Simple.Domain.Users;
 
-namespace Simple.App;
+namespace Simple.App.Contracts;
 
 public interface IExecutionContext
 {

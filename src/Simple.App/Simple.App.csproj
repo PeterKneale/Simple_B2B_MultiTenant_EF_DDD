@@ -16,8 +16,4 @@
     <ItemGroup>
       <ProjectReference Include="..\Simple.Infra\Simple.Infra.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Tenants\" />
-    </ItemGroup>
 </Project>

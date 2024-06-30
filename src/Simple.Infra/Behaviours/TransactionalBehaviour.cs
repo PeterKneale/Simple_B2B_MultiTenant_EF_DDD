@@ -1,11 +1,10 @@
 ﻿using Simple.Infra.Database;
+using Simple.Infra.DomainEvents;
 
 namespace Simple.Infra.Behaviours;
 
-public class TransactionalBehaviour<TRequest, TResponse>(Db db, ILogger<TransactionalBehaviour<TRequest, TResponse>> log)
-    : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : notnull
-    where TResponse : notnull
+internal class TransactionalBehaviour<TRequest, TResponse>(Db db, IDomainEventDispatcher dispatcher, ILogger<TransactionalBehaviour<TRequest, TResponse>> log)
+    : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull where TResponse : notnull
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
@@ -21,12 +20,13 @@ public class TransactionalBehaviour<TRequest, TResponse>(Db db, ILogger<Transact
 
     private async Task<TResponse> HandleCommand(RequestHandlerDelegate<TResponse> next, string name, CancellationToken cancellationToken)
     {
-        log.LogInformation($"Start Transaction: {name}");
+        log.LogDebug($"Start Transaction: {name}");
         await db.Database.BeginTransactionAsync(cancellationToken);
         var response = await next();
+        await dispatcher.Publish();
         await db.SaveChangesAsync(cancellationToken);
         await db.Database.CommitTransactionAsync(cancellationToken);
-        log.LogInformation($"End Transaction: {name}");
+        log.LogDebug($"End Transaction: {name}");
         return response;
     }
 }

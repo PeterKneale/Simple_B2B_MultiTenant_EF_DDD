@@ -2,9 +2,8 @@
 
 namespace Simple.Infra.Behaviours;
 
-public class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators, ILogger<TRequest> logs) : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : notnull
-    where TResponse : notnull
+internal class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators, ILogger<ValidationBehaviour<TRequest, TResponse>> logs)
+    : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull where TResponse : notnull
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {

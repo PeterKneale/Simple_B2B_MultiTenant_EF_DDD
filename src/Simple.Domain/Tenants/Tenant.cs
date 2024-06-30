@@ -1,6 +1,8 @@
-﻿namespace Simple.Domain.Tenants;
+﻿using Simple.Domain.Tenants.DomainEvents;
 
-public class Tenant : IAggregateRoot
+namespace Simple.Domain.Tenants;
+
+public class Tenant : Entity, IAggregateRoot
 {
     private Tenant()
     {
@@ -12,6 +14,7 @@ public class Tenant : IAggregateRoot
         TenantId = id;
         TenantName = name;
         CreatedAt = SystemTime.UtcNow();
+        AddDomainEvent(new TenantCreatedEvent(this));
     }
     
     public TenantId TenantId { get; private init; } = null!;

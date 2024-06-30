@@ -22,5 +22,7 @@ public class TenantConfiguration : IEntityTypeConfiguration<Tenant>
             .HasMaxLength(NameMaxLength)
             .HasColumnName(NameColumn)
             .HasConversion(new TenantNameConverter());
+
+        builder.Ignore(x => x.DomainEvents);
     }
 }
