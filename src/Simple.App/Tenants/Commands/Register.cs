@@ -1,4 +1,6 @@
-﻿using Simple.Domain.Tenants;
+﻿using Simple.App.Contracts;
+using Simple.App.Tenants.IntegrationEvents;
+using Simple.Domain.Tenants;
 using Simple.Domain.Tenants.Specifications;
 using Simple.Domain.Users;
 using Simple.Domain.Users.Specifications;
@@ -23,7 +25,7 @@ public static class Register
         }
     }
 
-    public class Handler(IRepository<Tenant> tenants, IRepository<User> users, ILogger<Handler> log) : IRequestHandler<Command>
+    public class Handler(IRepository<Tenant> tenants, IRepository<User> users, IIntegrationEventPublisher integration, ILogger<Handler> log) : IRequestHandler<Command>
     {
         public async Task Handle(Command command, CancellationToken cancellationToken)
         {
@@ -50,6 +52,14 @@ public static class Register
             
             await tenants.AddAsync(tenant, cancellationToken);
             await users.AddAsync(user, cancellationToken);
+
+            await integration.Publish(new TenantCreatedIntegrationEvent
+            {
+                TenantId = tenantId,
+                TenantName = tenantName,
+                UserId = userId,
+                Email = email
+            }, cancellationToken);
         }
     }
 }

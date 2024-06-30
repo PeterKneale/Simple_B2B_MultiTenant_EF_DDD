@@ -7,6 +7,7 @@ public static class DbConstants
     public const string UsersTable = "users";
     public const string SurveysTable = "surveys";
     public const string QuestionsTable = "questions";
+    public const string IntegrationEventTable = "integration_events";
 
     // Common Column Names
     public const string QuestionIdColumn = "question_id";
@@ -30,6 +31,8 @@ public static class DbConstants
     public const string VerifiedToken = "verification_token";
     public const string ForgotToken = "forgot_token";
     public const string ForgotPasswordTokenExpiry = "forgot_token_expiry";
+    public const string DataColumn = "data";
+    public const string ProcessedAt = "processed_at";
 
     public const string SurveyIdColumn = "survey_id";
 

@@ -3,6 +3,7 @@ using Simple.Domain.Surveys;
 using Simple.Domain.Tenants;
 using Simple.Domain.Users;
 using Simple.Infra.Database.Configuration;
+using Simple.Infra.IntegrationEvents;
 
 namespace Simple.Infra.Database;
 
@@ -16,12 +17,15 @@ public class Db(DbContextOptions<Db> options) : DbContext(options)
     public virtual DbSet<Survey> Surveys { get; init; }
     
     public virtual DbSet<Question> Questions { get; init; }
+    
+    public virtual DbSet<IntegrationEvent> IntegrationEvent { get; init; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        modelBuilder.ApplyConfiguration(new TenantConfiguration());
-        modelBuilder.ApplyConfiguration(new UserConfiguration());
-        modelBuilder.ApplyConfiguration(new SurveyConfiguration());
-        modelBuilder.ApplyConfiguration(new QuestionConfiguration());
+        builder.ApplyConfiguration(new TenantConfiguration());
+        builder.ApplyConfiguration(new UserConfiguration());
+        builder.ApplyConfiguration(new SurveyConfiguration());
+        builder.ApplyConfiguration(new QuestionConfiguration());
+        builder.ApplyConfiguration(new IntegrationEventConfiguration());
     }
 }

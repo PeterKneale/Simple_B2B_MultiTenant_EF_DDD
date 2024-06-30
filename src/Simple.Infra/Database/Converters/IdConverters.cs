@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Simple.Domain.Tenants;
 using Simple.Domain.Users;
 using Simple.Domain.Surveys;

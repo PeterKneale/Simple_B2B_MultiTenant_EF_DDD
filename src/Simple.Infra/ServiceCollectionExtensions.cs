@@ -2,10 +2,12 @@
 using FluentMigrator.Runner;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Simple.App.Contracts;
 using Simple.Infra.Behaviours;
 using Simple.Infra.Database;
 using Simple.Infra.Database.Repositories;
 using Simple.Infra.DomainEvents;
+using Simple.Infra.IntegrationEvents;
 using MigrationRunner = Simple.Infra.Database.Migrations.MigrationRunner;
 
 namespace Simple.Infra;
@@ -49,6 +51,7 @@ public static class ServiceCollectionExtensions
         
         // ddd
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+        services.AddScoped<IIntegrationEventPublisher, IntegrationEventPublisher>();
         return services;
     }
 }

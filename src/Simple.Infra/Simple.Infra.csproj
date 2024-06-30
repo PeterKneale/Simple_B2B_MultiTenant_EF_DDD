@@ -24,17 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Simple.App\Simple.App.csproj" />
     <ProjectReference Include="..\Simple.Domain\Simple.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Database\Converters\IdConverters.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>IdConverters.cs</LastGenOutput>
-    </None>
-    <None Update="Database\Converters\IdConverters.tt">
-      <LastGenOutput>IdConverters.cs</LastGenOutput>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -43,5 +34,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>IdConverters.tt</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Database\Converters\IdConverters.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IdConverters.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 </Project>

@@ -33,10 +33,18 @@ public class Migration1 : Migration
             .WithColumn(SurveyIdColumn).AsGuid().ForeignKey(SurveysTable, SurveyIdColumn)
             .WithColumn(InfoColumn).AsCustom("jsonb")
             .WithColumn(CreatedAtColumn).AsDateTimeOffset();
+        
+        Create.Table(IntegrationEventTable)
+            .WithColumn(IdColumn).AsGuid().PrimaryKey()
+            .WithColumn(TypeColumn).AsString()
+            .WithColumn(DataColumn).AsString()
+            .WithColumn(CreatedAtColumn).AsDateTimeOffset()
+            .WithColumn(ProcessedAt).AsDateTimeOffset().Nullable();
     }
 
     public override void Down()
     {
+        Delete.Table(IntegrationEventTable).IfExists();
         Delete.Table(QuestionsTable).IfExists();
         Delete.Table(SurveysTable).IfExists();
         Delete.Table(UsersTable).IfExists();
