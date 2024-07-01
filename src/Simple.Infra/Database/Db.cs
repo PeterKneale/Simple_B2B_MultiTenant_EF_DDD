@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Simple.Domain.Surveys;
 using Simple.Domain.Tenants;
 using Simple.Domain.Users;
-using Simple.Infra.Database.Configuration;
 using Simple.Infra.IntegrationEvents;
 
 namespace Simple.Infra.Database;
@@ -22,10 +22,7 @@ public class Db(DbContextOptions<Db> options) : DbContext(options)
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ApplyConfiguration(new TenantConfiguration());
-        builder.ApplyConfiguration(new UserConfiguration());
-        builder.ApplyConfiguration(new SurveyConfiguration());
-        builder.ApplyConfiguration(new QuestionConfiguration());
-        builder.ApplyConfiguration(new IntegrationEventConfiguration());
+        base.OnModelCreating(builder);
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }
