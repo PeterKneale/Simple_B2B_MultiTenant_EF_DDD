@@ -2,9 +2,9 @@ version: 2
 updates:
   - package-ecosystem: "nuget"
     directory: "/"
-    update-types:
-      - "minor"
-      - "patch"
+    ignore:
+      - dependency-name: "*"
+        update-types: [ "version-update:semver-major" ]
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
