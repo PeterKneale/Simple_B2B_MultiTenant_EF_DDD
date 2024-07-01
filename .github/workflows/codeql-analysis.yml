@@ -11,6 +11,8 @@ on:
 jobs:
   analyze:
     name: CodeQL Analysis
+    permissions:
+      security-events: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
